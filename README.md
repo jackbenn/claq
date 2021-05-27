@@ -10,10 +10,10 @@ Final names and tools TBD
 
 Probably these are sub commands on a single command.
 
-* cut - select or manipulate columns
+* select or cut- cut, select or manipulate columns
 * sort - reorder rows
-* aggr - group by and aggregate
-* narrow - switch the data from wide to narrow format (a.k.a., stack, melt, normalize
+* aggr - group by and aggregate, or do window functions
+* narrow - switch the data from wide to narrow format (a.k.a., stack, melt, normalize)
 * widen - switch the data from  narrow to wide format (a.k.a., unstack, pivot, denormalize)
 * where - select rows
 * format - outputs as human-readable text table, markdown, markup, etc.
