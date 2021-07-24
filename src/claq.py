@@ -14,23 +14,34 @@ class Data:
                               sep=sep,
                               header=header)
     
-    def print(self):
+    def command_print(self):
         self.df.to_csv(sys.stdout, index=False)
 
     def cut(self, cols):
         cols = [int(s) for s in cols.split(',')]
         return Data(self.df.iloc[:, cols])
     
-    def where(self, exp):
-        return Data(self.df[self.df.apply(exp, axis=1)])
+    def command_sort(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument('by', help='Columns')
+        args = parser.parse_args(sys.argv[2:])
+        cols = args.by.split(',')
+        return Data(self.df[self.df.sort_values(cols, axis=0)])
+
+    
+    def command_where(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument('exp', help='Expression for selection')
+        args = parser.parse_args(sys.argv[2:])
+        return Data(self.df[self.df.apply(args.exp, axis=1)])
     
     def command_plot(self):
-        self.load(sys.stdin)
         parser = argparse.ArgumentParser()
         self.df.plot(0, 1)
         plt.show()
 
-    def hist(self):
+    def command_hist(self):
+        parser = argparse.ArgumentParser()
         self.df.hist()
         plt.show()
 
@@ -46,6 +57,7 @@ if __name__ == '__main__':
     if not hasattr(data, "command_" + args.command):
         print(f"No such command: {args.command}")
         exit(1)
+    data.load(sys.stdin)
     getattr(data, "command_" + args.command)()
     """
     if args.command == 'plot':
@@ -57,6 +69,6 @@ if __name__ == '__main__':
         cols = sys.argv[2]
         data = data.cut(cols)
     """
-    print(args.command)
-    print(sys.argv)
+    #print(args.command)
+    #print(sys.argv)
     #data.print()
