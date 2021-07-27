@@ -26,7 +26,11 @@ class Data:
         parser.add_argument('by', help='Columns')
         args = parser.parse_args(sys.argv[2:])
         cols = args.by.split(',')
-        return Data(self.df[self.df.sort_values(cols, axis=0)])
+        ascending = [col[0] != '-' for col in cols]
+        cols = [col[1:] if col[0] == '-' else col for col in cols]
+        return self.df.sort_values(by=cols,
+                                   axis=0,
+                                   ascending=ascending)
 
     
     def command_where(self):
@@ -58,7 +62,7 @@ if __name__ == '__main__':
         print(f"No such command: {args.command}")
         exit(1)
     data.load(sys.stdin)
-    getattr(data, "command_" + args.command)()
+    print(getattr(data, "command_" + args.command)())
     """
     if args.command == 'plot':
         data.plot()
